@@ -10,4 +10,6 @@ sealed class ListAction {
     data class NavigateToNewEditor(
         val note: Note = Note()
     ) : ListAction()
+
+    object DeleteNote : ListAction()
 }

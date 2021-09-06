@@ -13,7 +13,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,10 +51,11 @@ fun MainScreen(notes: State<ListState>, eventHandler: (ListEvent) -> Unit) {
             }
         }
     }) {
-        LazyColumn {
+        LazyColumn(modifier = Modifier.background(color = Color.White)) {
             items(remembered.value.notes) { item ->
                 NoteItem(note = item, eventHandler = eventHandler)
             }
+
         }
     }
 }
@@ -67,36 +67,76 @@ fun NoteItem(note: Note, eventHandler: (ListEvent) -> Unit) {
             .fillMaxWidth()
             .padding(bottom = 5.dp)
             .clickable { eventHandler.invoke(ListEvent.NoteClick(note = note)) }
+
     ) {
-        NoteRow(
-            backgroundColor = colorResource(id = R.color.topNoteBlock),
+
+        NoteTopRow(
             text = note.title,
-            textColor = colorResource(id = R.color.noteTitle)
+            eventHandler = eventHandler,
+            note = note
         )
-        NoteRow(
-            backgroundColor = colorResource(id = R.color.mainNoteBlock),
+
+        NoteDownRow(
             text = note.text
         )
     }
 }
 
 @Composable
-fun NoteRow(
-    backgroundColor: Color,
+fun NoteTopRow(
+    text: String,
+    eventHandler: (ListEvent) -> Unit,
+    note: Note
+) {
+    Row(
+        modifier = Modifier
+            .background(color = colorResource(id = R.color.topNoteBlock))
+            .fillMaxWidth()
+    ) {
+
+        Text(
+            text = text,
+            color = colorResource(id = R.color.noteTitle),
+            modifier = Modifier
+                .padding(5.dp)
+                .weight(1f)
+        )
+
+        IconButton(
+            onClick = { eventHandler(ListEvent.DeleteNote(note = note)) },
+        )
+        {
+            Icon(
+                painter = painterResource(id = R.drawable.delete),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(30.dp)
+                    .weight(1f),
+                tint = Color.Red
+            )
+        }
+
+    }
+}
+
+@Composable
+fun NoteDownRow(
     text: String,
     textColor: Color = Color.Black
 ) {
     Row(
         modifier = Modifier
-            .background(color = backgroundColor)
+            .background(color = colorResource(id = R.color.mainNoteBlock))
             .fillMaxWidth()
     ) {
+
         Text(
             text = text,
             color = textColor,
             modifier = Modifier
                 .padding(5.dp)
         )
+
     }
 }
 
@@ -105,5 +145,6 @@ fun NoteRow(
 @Preview(showBackground = true)
 @Composable
 private fun ScreenPreview() {
-    MainScreen(mutableStateOf(ListState()), {})
+//    MainScreen(mutableStateOf(ListState()), {})
+    NoteItem(note = Note(1, "", ""), eventHandler = {})
 }

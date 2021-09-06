@@ -18,12 +18,15 @@ class MainViewModel : ViewModel() {
     fun obtainEvent(event: ListEvent) = viewModelScope.launch {
         when (event) {
             is ListEvent.NoteClick -> action.value =
-                ListAction.NavigateToEditor(event.note)
+                ListAction.NavigateToEditor(note = event.note)
 
             is ListEvent.NewNote -> action.value = ListAction.NavigateToNewEditor()
 
             is ListEvent.DeleteNote -> {
+//                val deleteIndex = state.value.notes.indexOf(event.note)
+                state.value.notes.remove(event.note)
                 Repository.delete(note = event.note)
+                action.value = ListAction.DeleteNote
             }
 
             is ListEvent.OnListCreate -> {

@@ -39,12 +39,20 @@ class MainActivity : ComponentActivity() {
                 intent.putExtra(KEY_NEW, 0)
                 startActivity(intent)
             }
+
             is ListAction.NavigateToNewEditor -> {
                 val intent = Intent(this, EditorActivity::class.java)
                 intent.putExtra(KEY_NOTE, action.note)
                 intent.putExtra(KEY_NEW, 1)
                 startActivity(intent)
             }
+
+            is ListAction.DeleteNote -> {
+                setContent {
+                    MainScreen(notes = viewModel.state) { viewModel.obtainEvent(it) }
+                }
+            }
+
         }
     }
 

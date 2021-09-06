@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,13 +27,14 @@ fun NoteScreen(note: Note?, eventHandler: (EditorEvent) -> Unit) {
 
     Scaffold(topBar = {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.LightGray),
+
+
         ) {
 
-            Box(
-                contentAlignment = Alignment.CenterStart
+            Row( modifier = Modifier
+                .weight(1f)
+                .background(color = Color.Transparent),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 IconButton(
                     onClick = {
@@ -48,8 +50,10 @@ fun NoteScreen(note: Note?, eventHandler: (EditorEvent) -> Unit) {
                 }
             }
 
-            Box(
-                contentAlignment = Alignment.CenterEnd
+            Row( modifier = Modifier
+                .weight(1f)
+                .background(color = Color.Transparent),
+                horizontalArrangement = Arrangement.End
             ) {
                 IconButton(
                     onClick = {
@@ -90,13 +94,14 @@ fun NoteScreen(note: Note?, eventHandler: (EditorEvent) -> Unit) {
                         )
                     },
                     label = { Text(text = "Title:") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(color = colorResource(id = R.color.mainNoteBlock))
                 )
             }
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .background(color = colorResource(id = R.color.mainNoteBlock))
 
             ) {
@@ -112,7 +117,7 @@ fun NoteScreen(note: Note?, eventHandler: (EditorEvent) -> Unit) {
                         )
                     },
                     label = { Text(text = "Title:") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         }
