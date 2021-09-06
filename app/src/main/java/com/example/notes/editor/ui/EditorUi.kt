@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -19,7 +20,7 @@ import com.example.notes.model.Note
 import com.example.notes.editor.model.EditorEvent
 
 @Composable
-fun NoteScreen(note: Note? , eventHandler: (EditorEvent) -> Unit) {
+fun NoteScreen(note: Note?, eventHandler: (EditorEvent) -> Unit) {
     var title = remember { mutableStateOf(value = TextFieldValue(note?.title ?: "")) }
     var text = remember { mutableStateOf(value = TextFieldValue(note?.text ?: "")) }
 
@@ -28,19 +29,40 @@ fun NoteScreen(note: Note? , eventHandler: (EditorEvent) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.LightGray),
-            horizontalArrangement = Arrangement.End
         ) {
-            IconButton(
-                onClick = {
-                    eventHandler(EditorEvent.SaveNote(note!!))
-                          },
-            )
-            {
-                Icon(
-                    painter = painterResource(id = R.drawable.save),
-                    contentDescription = null,
-                    modifier = Modifier.size(30.dp)
+
+            Box(
+                contentAlignment = Alignment.CenterStart
+            ) {
+                IconButton(
+                    onClick = {
+                        eventHandler(EditorEvent.NavigateToNoteList)
+                    },
                 )
+                {
+                    Icon(
+                        painter = painterResource(id = R.drawable.back_arrow),
+                        contentDescription = null,
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
+            }
+
+            Box(
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                IconButton(
+                    onClick = {
+                        eventHandler(EditorEvent.SaveNote(note!!))
+                    },
+                )
+                {
+                    Icon(
+                        painter = painterResource(id = R.drawable.save),
+                        contentDescription = null,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
             }
         }
     }) {
@@ -61,9 +83,9 @@ fun NoteScreen(note: Note? , eventHandler: (EditorEvent) -> Unit) {
                     onValueChange = {
                         title.value = it
                         eventHandler(
-                            EditorEvent.ChangeTitle(
-                                note = note!!,
-                                newTitle = it.text
+                            EditorEvent.UpdateNote(
+                                newTitle = it.text,
+                                newText = text.value.text
                             )
                         )
                     },
@@ -83,8 +105,8 @@ fun NoteScreen(note: Note? , eventHandler: (EditorEvent) -> Unit) {
                     onValueChange = {
                         text.value = it
                         eventHandler(
-                            EditorEvent.ChangeText(
-                                note = note!!,
+                            EditorEvent.UpdateNote(
+                                newTitle = title.value.text,
                                 newText = it.text
                             )
                         )
@@ -97,8 +119,8 @@ fun NoteScreen(note: Note? , eventHandler: (EditorEvent) -> Unit) {
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//private fun NoteScreenPreview() {
-//    NoteScreen(1, Note(1, "jhlkh", "hg"), {})
-//}
+@Preview(showBackground = true)
+@Composable
+private fun NoteScreenPreview() {
+    NoteScreen(Note(1, "jhlkh", "hg"), {})
+}

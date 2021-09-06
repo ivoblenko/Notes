@@ -4,7 +4,6 @@ import com.example.notes.model.Note
 
 sealed class ListEvent {
     data class NoteClick(
-        val index: Long,
         val note: Note
     ) : ListEvent()
 

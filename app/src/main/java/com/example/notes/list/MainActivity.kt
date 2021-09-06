@@ -26,17 +26,23 @@ class MainActivity : ComponentActivity() {
         viewModel.action.observe(this) { obtainAction(it) }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.obtainEvent(ListEvent.OnListCreate)
+    }
+
     private fun obtainAction(action: ListAction) {
         when (action) {
             is ListAction.NavigateToEditor -> {
                 val intent = Intent(this, EditorActivity::class.java)
                 intent.putExtra(KEY_NOTE, action.note)
-                intent.putExtra(KEY_INDEX, action.index)
+                intent.putExtra(KEY_NEW, 0)
                 startActivity(intent)
             }
             is ListAction.NavigateToNewEditor -> {
                 val intent = Intent(this, EditorActivity::class.java)
                 intent.putExtra(KEY_NOTE, action.note)
+                intent.putExtra(KEY_NEW, 1)
                 startActivity(intent)
             }
         }
@@ -44,7 +50,7 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         const val KEY_NOTE = "note"
-        const val KEY_INDEX = "index"
+        const val KEY_NEW = "new"
     }
 }
 

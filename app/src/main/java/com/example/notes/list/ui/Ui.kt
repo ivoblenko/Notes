@@ -66,7 +66,7 @@ fun NoteItem(note: Note, eventHandler: (ListEvent) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 5.dp)
-            .clickable { eventHandler.invoke(ListEvent.NoteClick(index = note.id, note = note)) }
+            .clickable { eventHandler.invoke(ListEvent.NoteClick(note = note)) }
     ) {
         NoteRow(
             backgroundColor = colorResource(id = R.color.topNoteBlock),

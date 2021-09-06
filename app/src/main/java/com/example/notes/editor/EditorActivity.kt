@@ -15,9 +15,17 @@ class EditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val index = intent.getIntExtra(MainActivity.KEY_INDEX, 0)
         val note = intent.getParcelableExtra<Note>(MainActivity.KEY_NOTE)
-        setContent { NoteScreen(note =note, eventHandler ={viewModel.obtainEvent(it)}) }
+        var newNote = intent.getIntExtra(MainActivity.KEY_NEW, 1) == 1
+
+
+        viewModel.note.value = viewModel.note.value.copy(
+            new = newNote,
+            note = note!!
+        )
+
+
+        setContent { NoteScreen(note = note, eventHandler = { viewModel.obtainEvent(it) }) }
         viewModel.action.observe(this) { obtainAction(it) }
 
         supportActionBar?.hide()
@@ -30,3 +38,5 @@ class EditorActivity : AppCompatActivity() {
         }
     }
 }
+
+

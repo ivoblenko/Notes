@@ -18,11 +18,14 @@ class MainViewModel : ViewModel() {
     fun obtainEvent(event: ListEvent) = viewModelScope.launch {
         when (event) {
             is ListEvent.NoteClick -> action.value =
-                ListAction.NavigateToEditor(event.index, event.note)
+                ListAction.NavigateToEditor(event.note)
+
             is ListEvent.NewNote -> action.value = ListAction.NavigateToNewEditor()
+
             is ListEvent.DeleteNote -> {
                 Repository.delete(note = event.note)
             }
+
             is ListEvent.OnListCreate -> {
                 state.value =
                     state.value.copy(notes = Repository.getNoteAll().toMutableList())
